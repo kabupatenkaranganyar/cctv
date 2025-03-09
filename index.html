@@ -183,21 +183,27 @@
     </div>
 
     <script>
-        const images = [
-            'https://scctv.karanganyarkab.go.id/zm/cgi-bin/nph-zms?scale=100&monitor=42&auth=578288c2894c0cff73a97ee5fb0f3cb3&rand=1678761874',
-            'https://scctv.karanganyarkab.go.id/zm/cgi-bin/nph-zms?scale=100&monitor=43&auth=578288c2894c0cff73a97ee5fb0f3cb3&rand=1678761874',
-            'https://scctv.karanganyarkab.go.id/zm/cgi-bin/nph-zms?scale=100&monitor=52&auth=578288c2894c0cff73a97ee5fb0f3cb3&rand=1678761874',
-            'https://scctv.karanganyarkab.go.id/zm/cgi-bin/nph-zms?scale=100&monitor=53&auth=578288c2894c0cff73a97ee5fb0f3cb3&rand=1678761874',
-            'https://scctv.karanganyarkab.go.id/zm/cgi-bin/nph-zms?scale=100&monitor=46&auth=578288c2894c0cff73a97ee5fb0f3cb3&rand=1678761874'
-        ];
+        let monitors = [];
+        let titles = [];
 
-        const titles = [
-            'Depan KODIM Karanganyar',
-            'Plasa Alun-alun (Arah Utara)',
-            'Simpang Siwaluh',
-            'Simpang POLRES Karanganyar',
-            'Pojok Setda Timur',
-        ];
+        fetch(`${window.location.origin}/data.json`)
+            .then(response => response.json())
+            .then(data => {
+                monitors = data.map(camera => camera.monitor);
+                titles = data.map(camera => camera.title);
+                createListNavigation();
+                showImage(0);
+            })
+            .catch(error => {
+                console.error('Error loading data:', error);
+                document.getElementById('error-msg').textContent = 'Gagal memuat data CCTV';
+                document.getElementById('error-msg').style.display = 'block';
+            });
+
+        function getImageUrl(monitor) {
+            return `https://scctv.karanganyarkab.go.id/zm/cgi-bin/nph-zms?scale=100&monitor=${monitor}&auth=578288c2894c0cff73a97ee5fb0f3cb3&rand=1678761874&maxfps=5`;
+            //?mode=jpeg&monitor=6&scale=100&maxfps=15&buffer=1000&user=user&pass=user
+        }
 
         let currentIndex = 0;
         const currentImage = document.getElementById('current-image');
@@ -209,7 +215,7 @@
 
         // Membuat navigasi list
         function createListNavigation() {
-            images.forEach((_, index) => {
+            monitors.forEach((_, index) => {
                 const li = document.createElement('li');
                 li.className = 'nav-item' + (index === 0 ? ' active' : '');
                 li.textContent = titles[index];
@@ -236,12 +242,12 @@
             errorMsg.style.display = 'none';
 
             const img = new Image();
-            img.src = images[index];
+            img.src = getImageUrl(monitors[index]);
 
             img.onload = () => {
                 currentIndex = index;
-                currentImage.src = images[currentIndex];
-                lightboxImg.src = images[currentIndex];
+                currentImage.src = getImageUrl(monitors[currentIndex]);
+                lightboxImg.src = getImageUrl(monitors[currentIndex]);
                 updateNavigation();
                 hideLoading();
             };
@@ -253,8 +259,8 @@
         }
 
         function updateImage() {
-            currentImage.src = images[currentIndex];
-            lightboxImg.src = images[currentIndex];
+            currentImage.src = getImageUrl(monitors[currentIndex]);
+            lightboxImg.src = getImageUrl(monitors[currentIndex]);
         }
 
         function updateNavigation() {
@@ -274,14 +280,10 @@
 
         // Navigasi keyboard
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') showImage((currentIndex + 1) % images.length);
-            if (e.key === 'ArrowLeft') showImage((currentIndex - 1 + images.length) % images.length);
+            if (e.key === 'ArrowRight') showImage((currentIndex + 1) % monitors.length);
+            if (e.key === 'ArrowLeft') showImage((currentIndex - 1 + monitors.length) % monitors.length);
             if (e.key === 'Escape') closeLightbox();
         });
-
-        // Inisialisasi
-        createListNavigation();
-        showImage(0); // Load gambar pertama saat inisialisasi
     </script>
 </body>
 
