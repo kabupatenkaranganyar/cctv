@@ -186,7 +186,7 @@
         let monitors = [];
         let titles = [];
 
-        fetch(`${window.location.origin}/data.json`)
+        fetch(`${window.location.href}/data.json`)
             .then(response => response.json())
             .then(data => {
                 monitors = data.map(camera => camera.monitor);
