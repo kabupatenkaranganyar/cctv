@@ -32,8 +32,8 @@
         "title": "Simpang Siwaluh"
     },
     {
-        "monitor": 53,
-        "title": "Simpang POLRES Karanganyar"
+        "monitor": 4,
+        "title": "Depan Masjid Agung"
     },
     {
         "monitor": 54,
@@ -54,6 +54,14 @@
     {
         "monitor": 61,
         "title": "Taman Pancasila Selatan"
+    },
+    {
+        "monitor": 62,
+        "title": "Simpang Papahan"
+    },
+    {
+        "monitor": 63,
+        "title": "Simpang Bejen"
     },
     {
         "monitor": 46,
