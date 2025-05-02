@@ -23,6 +23,10 @@
         "monitor": 50,
         "title": "Karangpandan Timur"
     },
+     {
+        "monitor": 51,
+        "title": "Depan BLK Karangpandan"
+    },
     {
         "monitor": 52,
         "title": "Simpang Siwaluh"
@@ -30,6 +34,26 @@
     {
         "monitor": 53,
         "title": "Simpang POLRES Karanganyar"
+    },
+    {
+        "monitor": 54,
+        "title": "Simpang Masjid Mukarromah"
+    },
+    {
+        "monitor": 55,
+        "title": "Simpang Kebakkramat"
+    },
+    {
+        "monitor": 56,
+        "title": "Colomadu Utara"
+    },
+     {
+        "monitor": 57,
+        "title": "Colomadu Barat"
+    },
+    {
+        "monitor": 61,
+        "title": "Taman Pancasila Selatan"
     },
     {
         "monitor": 46,
