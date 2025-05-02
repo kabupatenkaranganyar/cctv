@@ -59,6 +59,19 @@
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap; /* Allow content to wrap on smaller screens */
+        }
+
+        .main-content {
+            flex: 2; /* Take up more space */
+            min-width: 300px; /* Minimum width for the stream view */
+        }
+
+        .sidebar {
+            flex: 1; /* Take up less space */
+            min-width: 250px; /* Minimum width for the sidebar */
         }
 
         .toolbar {
@@ -73,15 +86,33 @@
             padding: 10px 15px;
             border: 1px solid #ccc;
             border-radius: 8px;
-            width: 200px;
+            width: 100%; /* Take full width of the sidebar */
             max-width: 100%;
+        }
+
+        #main-stream {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background-color: #eee;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        #main-stream img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .cctv-list {
             list-style: none;
             padding: 0;
             margin: 0;
-            margin-bottom: 20px;
         }
 
         .cctv-item {
@@ -147,23 +178,8 @@
             transform: translateX(20px);
         }
 
-        #main-stream {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            background-color: #eee;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        #main-stream img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        #placeholder-text {
+            text-align: center;
         }
 
         .error-message {
@@ -175,13 +191,13 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .toolbar {
-                flex-direction: column;
-                align-items: flex-start;
+            .container {
+                flex-direction: column; /* Stack main content and sidebar */
             }
 
-            .search-box input {
-                width: 100%;
+            .sidebar {
+                order: -1; /* Move sidebar above main content */
+                margin-bottom: 20px;
             }
         }
     </style>
@@ -190,32 +206,34 @@
 <body>
     <div class="overlay"></div>
     <header>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Lambang_Kabupaten_Karanganyar.png" alt="Logo Karanganyar">
-        <div class="brand-text">CCTV Kabupaten Karanganyar</div>
+        <img src="https://cctv.karanganyarkab.go.id/assets/img/logo/cctv_logo.png" alt="Logo Karanganyar">
+        <div class="brand-text"></div>
     </header>
 
     <div class="container">
-        <div class="toolbar">
-            <div class="search-box">
-                <input type="text" id="search" placeholder="Cari lokasi CCTV..." />
+        <div class="main-content">
+            <div id="main-stream">
+                <img id="main-stream-image" src="" alt="Tampilan Utama CCTV" style="display: none;">
+                <div id="placeholder-text">Pilih lokasi CCTV dari daftar di bawah untuk menampilkan streaming.</div>
             </div>
+            <div class="error-message" id="error-msg">Gagal memuat data CCTV</div>
         </div>
-
-        <div id="main-stream">
-            <img id="main-stream-image" src="" alt="Tampilan Utama CCTV" style="display: none;">
-            <div id="placeholder-text">Pilih lokasi CCTV dari daftar di bawah untuk menampilkan streaming.</div>
-        </div>
-
-        <ul id="cctv-list" class="cctv-list">
+        <div class="sidebar">
+            <div class="toolbar">
+                <div class="search-box">
+                    <input type="text" id="search" placeholder="Cari lokasi CCTV..." />
+                </div>
+            </div>
+            <ul id="cctv-list" class="cctv-list">
             </ul>
-
-        <div class="error-message" id="error-msg">Gagal memuat data CCTV</div>
+        </div>
     </div>
 
     <script>
         let cctvData = [];
         const mainStreamImage = document.getElementById('main-stream-image');
         const placeholderText = document.getElementById('placeholder-text');
+        const cctvListElement = document.getElementById('cctv-list');
 
         function getImageUrl(monitor) {
             return `https://scctv.karanganyarkab.go.id/zm/cgi-bin/nph-zms?scale=100&monitor=${monitor}&auth=578288c2894c0cff73a97ee5fb0f3cb3&rand=${Date.now()}&maxfps=5`;
@@ -234,8 +252,7 @@
         }
 
         function createCCTVList() {
-            const cctvList = document.getElementById('cctv-list');
-            cctvList.innerHTML = '';
+            cctvListElement.innerHTML = '';
 
             cctvData.forEach(cctv => {
                 const listItem = document.createElement('li');
@@ -247,9 +264,6 @@
 
                 const toggleContainer = document.createElement('div');
                 toggleContainer.className = 'toggle-switch';
-
-                const toggleLabel = document.createElement('label');
-                toggleLabel.textContent = 'Tampilkan';
 
                 const switchDiv = document.createElement('label');
                 switchDiv.className = 'switch';
@@ -281,12 +295,11 @@
 
                 switchDiv.appendChild(checkbox);
                 switchDiv.appendChild(slider);
-                toggleContainer.appendChild(toggleLabel);
                 toggleContainer.appendChild(switchDiv);
 
                 listItem.appendChild(label);
                 listItem.appendChild(toggleContainer);
-                cctvList.appendChild(listItem);
+                cctvListElement.appendChild(listItem);
             });
         }
 
@@ -306,7 +319,7 @@
                 createCCTVList();
             })
             .catch(err => {
-                document.getElementById('error-msg').style.display = 'block';
+                document.querySelector('.error-message').style.display = 'block';
                 console.error(err);
             });
     </script>
