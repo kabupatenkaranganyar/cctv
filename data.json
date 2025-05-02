@@ -7,6 +7,18 @@
         "monitor": 43,
         "title": "Plasa Alun-alun (Arah Utara)"
     },
+     {
+        "monitor": 47
+        "title": "Bundaran HI Tawangmangu"
+    },
+     {
+        "monitor": 48,
+        "title": "Terminal Tawangmangu"
+    },
+    {
+        "monitor": 49,
+        "title": "Karangpandan Barat"
+    },
     {
         "monitor": 50,
         "title": "Karangpandan Timur"
