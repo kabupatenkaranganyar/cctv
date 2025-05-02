@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CCTV Diskominfo Kabupaten Karanganyar</title>
+  <title>CCTV Diskominfo Karanganyar</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     * {
@@ -15,66 +15,56 @@
 
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to right, #e0f7fa, #ffffff);
-      min-height: 100vh;
+      background-color: #f0f4f8;
       color: #333;
+    }
+
+    header {
+      background-color: #1976d2;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      letter-spacing: 1px;
     }
 
     .gallery-container {
       max-width: 1200px;
-      margin: 40px auto;
-      padding: 20px;
+      margin: 20px auto;
+      padding: 0 15px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .cctv-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       display: flex;
-      gap: 30px;
-      flex-wrap: wrap;
+      flex-direction: column;
+      transition: transform 0.2s ease;
     }
 
-    .main-content {
-      flex: 2;
-      min-width: 300px;
+    .cctv-card:hover {
+      transform: translateY(-4px);
     }
 
-    .gallery-image {
+    .cctv-image {
       width: 100%;
-      max-height: 70vh;
-      object-fit: contain;
-      border-radius: 12px;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+      height: 200px;
+      object-fit: cover;
       cursor: pointer;
-      transition: transform 0.3s ease;
     }
 
-    .gallery-image:hover {
-      transform: scale(1.01);
-    }
-
-    .nav-list {
-      flex: 1;
-      min-width: 200px;
-      background-color: #fff;
-      border-radius: 12px;
-      padding: 15px;
-      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
-      overflow-x: auto;
-    }
-
-    .nav-item {
+    .cctv-title {
       padding: 12px;
-      margin: 6px 0;
-      cursor: pointer;
-      border-radius: 8px;
-      transition: background 0.3s;
-      list-style: none;
-    }
-
-    .nav-item:hover {
-      background-color: #f0f8ff;
-    }
-
-    .nav-item.active {
-      background-color: #1976d2;
-      color: white;
+      text-align: center;
       font-weight: 600;
+      font-size: 1rem;
+      background-color: #fafafa;
     }
 
     .lightbox {
@@ -82,114 +72,54 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.85);
-      z-index: 1000;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 999;
       align-items: center;
       justify-content: center;
     }
 
     .lightbox-content {
-      position: relative;
       max-width: 90%;
       max-height: 90%;
     }
 
     .lightbox-img {
       width: 100%;
-      max-height: 90vh;
+      height: auto;
       border-radius: 8px;
-      object-fit: contain;
     }
 
     .close-btn {
       position: absolute;
-      top: -30px;
-      right: -30px;
-      font-size: 32px;
+      top: 30px;
+      right: 30px;
+      font-size: 2rem;
       color: white;
       cursor: pointer;
-    }
-
-    .loading-container {
-      position: relative;
-      min-height: 300px;
-    }
-
-    .loading-spinner {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 40px;
-      height: 40px;
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #3498db;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      display: none;
-    }
-
-    .loading-text {
-      position: absolute;
-      top: calc(50% + 30px);
-      left: 50%;
-      transform: translateX(-50%);
-      color: #666;
-      display: none;
-    }
-
-    @keyframes spin {
-      to {
-        transform: translate(-50%, -50%) rotate(360deg);
-      }
     }
 
     .error-message {
       color: #e74c3c;
       text-align: center;
-      margin-top: 20px;
-      font-weight: bold;
+      margin: 20px;
       display: none;
     }
 
-    @media (max-width: 768px) {
-      .gallery-container {
-        flex-direction: column;
-        padding: 15px;
-      }
-
-      .nav-list {
-        display: flex;
-        overflow-x: auto;
-        flex-direction: row;
-        gap: 10px;
-        padding: 10px;
-      }
-
-      .nav-item {
-        white-space: nowrap;
-        flex-shrink: 0;
-        margin: 0;
+    @media (max-width: 600px) {
+      .cctv-title {
+        font-size: 0.9rem;
       }
     }
   </style>
 </head>
 
 <body>
-  <div class="gallery-container">
-    <div class="main-content">
-      <div class="loading-container">
-        <div class="loading-spinner"></div>
-        <div class="loading-text">Memuat...</div>
-        <img id="current-image" class="gallery-image" onclick="openLightbox()" />
-      </div>
-      <div class="error-message" id="error-msg">Gagal memuat gambar</div>
-    </div>
+  <header>CCTV Diskominfo Karanganyar</header>
 
-    <ul class="nav-list" id="nav-list"></ul>
-  </div>
+  <div id="gallery" class="gallery-container"></div>
+  <div class="error-message" id="error-msg">Gagal memuat data CCTV</div>
 
   <!-- Lightbox -->
   <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
@@ -200,85 +130,40 @@
   </div>
 
   <script>
-    let monitors = [];
-    let titles = [];
-
-    fetch(`${window.location.href}/data.json`)
-      .then((response) => response.json())
-      .then((data) => {
-        monitors = data.map((camera) => camera.monitor);
-        titles = data.map((camera) => camera.title);
-        createListNavigation();
-        showImage(0);
-      })
-      .catch((error) => {
-        console.error('Error loading data:', error);
-        document.getElementById('error-msg').textContent = 'Gagal memuat data CCTV';
-        document.getElementById('error-msg').style.display = 'block';
-      });
+    let monitors = [], titles = [];
 
     function getImageUrl(monitor) {
       return `https://scctv.karanganyarkab.go.id/zm/cgi-bin/nph-zms?scale=100&monitor=${monitor}&auth=578288c2894c0cff73a97ee5fb0f3cb3&rand=${Date.now()}&maxfps=5`;
     }
 
-    let currentIndex = 0;
-    const currentImage = document.getElementById('current-image');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const navList = document.getElementById('nav-list');
-    const spinner = document.querySelector('.loading-spinner');
-    const loadingText = document.querySelector('.loading-text');
-    const errorMsg = document.getElementById('error-msg');
+    function createGallery() {
+      const gallery = document.getElementById('gallery');
+      monitors.forEach((monitor, index) => {
+        const card = document.createElement('div');
+        card.className = 'cctv-card';
 
-    function createListNavigation() {
-      monitors.forEach((_, index) => {
-        const li = document.createElement('li');
-        li.className = 'nav-item' + (index === 0 ? ' active' : '');
-        li.textContent = titles[index];
-        li.onclick = () => showImage(index);
-        navList.appendChild(li);
+        const img = document.createElement('img');
+        img.className = 'cctv-image';
+        img.src = getImageUrl(monitor);
+        img.alt = titles[index];
+        img.onerror = () => {
+          img.src = '';
+          img.style.display = 'none';
+        };
+        img.onclick = () => openLightbox(img.src);
+
+        const title = document.createElement('div');
+        title.className = 'cctv-title';
+        title.textContent = titles[index];
+
+        card.appendChild(img);
+        card.appendChild(title);
+        gallery.appendChild(card);
       });
     }
 
-    function showLoading() {
-      spinner.style.display = 'block';
-      loadingText.style.display = 'block';
-      currentImage.style.opacity = '0.5';
-      errorMsg.style.display = 'none';
-    }
-
-    function hideLoading() {
-      spinner.style.display = 'none';
-      loadingText.style.display = 'none';
-      currentImage.style.opacity = '1';
-    }
-
-    function showImage(index) {
-      showLoading();
-      const img = new Image();
-      img.src = getImageUrl(monitors[index]);
-
-      img.onload = () => {
-        currentIndex = index;
-        currentImage.src = img.src;
-        lightboxImg.src = img.src;
-        updateNavigation();
-        hideLoading();
-      };
-
-      img.onerror = () => {
-        hideLoading();
-        errorMsg.style.display = 'block';
-      };
-    }
-
-    function updateNavigation() {
-      const items = document.getElementsByClassName('nav-item');
-      Array.from(items).forEach((item, index) => {
-        item.classList.toggle('active', index === currentIndex);
-      });
-    }
-
-    function openLightbox() {
+    function openLightbox(src) {
+      document.getElementById('lightbox-img').src = src;
       document.getElementById('lightbox').style.display = 'flex';
     }
 
@@ -288,11 +173,17 @@
       }
     }
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight') showImage((currentIndex + 1) % monitors.length);
-      if (e.key === 'ArrowLeft') showImage((currentIndex - 1 + monitors.length) % monitors.length);
-      if (e.key === 'Escape') closeLightbox({ target: { id: 'lightbox' } });
-    });
+    fetch(`${window.location.href}/data.json`)
+      .then(res => res.json())
+      .then(data => {
+        monitors = data.map(c => c.monitor);
+        titles = data.map(c => c.title);
+        createGallery();
+      })
+      .catch(err => {
+        document.getElementById('error-msg').style.display = 'block';
+        console.error(err);
+      });
   </script>
 </body>
 
